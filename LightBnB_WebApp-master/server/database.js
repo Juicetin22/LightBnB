@@ -35,22 +35,6 @@ const getUserWithEmail = function(email) {
 
 exports.getUserWithEmail = getUserWithEmail;
 
-//original js code without pg
-/*
-const getUserWithEmail = function(email) {
-  let user;
-  for (const userId in users) {
-    user = users[userId];
-    if (user.email.toLowerCase() === email.toLowerCase()) {
-      break;
-    } else {
-      user = null;
-    }
-  }
-  return Promise.resolve(user);
-}
-*/
-
 /**
  * Get a single user from the database given their id.
  * @param {string} id The id of the user.
@@ -74,13 +58,6 @@ const getUserWithId = function(id) {
 
 exports.getUserWithId = getUserWithId;
 
-//original js code without pg
-/*
-const getUserWithId = function(id) {
-  return Promise.resolve(users[id]);
-}
-*/
-
 /**
  * Add a new user to the database.
  * @param {{name: string, password: string, email: string}} user
@@ -99,15 +76,6 @@ const addUser = function(user) {
 };
 
 exports.addUser = addUser;
-
-// original js code without pg
-// const addUser =  function(user) {
-//   const userId = Object.keys(users).length + 1;
-//   user.id = userId;
-//   users[userId] = user;
-//   return Promise.resolve(user);
-// }
-
 
 /// Reservations
 
@@ -135,28 +103,6 @@ const getAllReservations = function(guest_id, limit = 10) {
 };
 exports.getAllReservations = getAllReservations;
 
-// testing - reservations without the avg rating
-// const getAllReservations = function(guest_id, limit = 10) {
-//   return pool
-//     .query(`SELECT *
-//             FROM reservations
-//             JOIN properties ON properties.id = reservations.property_id
-//             WHERE reservations.guest_id = $1
-//             ORDER BY start_date DESC
-//             LIMIT $2;`,
-//             [guest_id, limit])
-//     .then(result => result.rows)
-//     .catch((err) => {
-//       console.log(err.message)
-//     });
-// };
-
-// original js code without pg
-// const getAllReservations = function(guest_id, limit = 10) {
-//   return getAllProperties(null, 2);
-// }
-
-
 /// Properties
 
 /**
@@ -165,21 +111,6 @@ exports.getAllReservations = getAllReservations;
  * @param {*} limit The number of results to return.
  * @return {Promise<[{}]>}  A promise to the properties.
  */
-
-// const getAllProperties = (options, limit = 10) => {
-//   return pool
-//     .query(`SELECT properties.*, avg(property_reviews.rating) as average_rating
-//             FROM properties 
-//             JOIN property_reviews ON properties.id = property_id
-//             GROUP BY properties.id
-//             ORDER BY properties.id
-//             LIMIT $1;`, 
-//             [limit])
-//     .then((result) => result.rows)
-//     .catch((err) => {
-//       console.log(err.message);
-//     });
-// };
 
 const getAllProperties = function (options, limit = 10) {
   // 1 - set up array to hold parameters from users
@@ -274,15 +205,6 @@ const getAllProperties = function (options, limit = 10) {
 
 exports.getAllProperties = getAllProperties;
 
-//original js code with pg
-// const getAllProperties = function(options, limit = 10) {
-//   const limitedProperties = {};
-//   for (let i = 1; i <= limit; i++) {
-//     limitedProperties[i] = properties[i];
-//   }
-//   return Promise.resolve(limitedProperties);
-// }
-
 /**
  * Add a property to the database
  * @param {{}} property An object containing all of the property details.
@@ -304,11 +226,3 @@ const addProperty = function(property) {
 };
 
 exports.addProperty = addProperty;
-
-// original js code without pg
-// const addProperty = function(property) {
-//   const propertyId = Object.keys(properties).length + 1;
-//   property.id = propertyId;
-//   properties[propertyId] = property;
-//   return Promise.resolve(property);
-// }
